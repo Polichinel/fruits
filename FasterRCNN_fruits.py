@@ -107,7 +107,7 @@ class FruitImagesDataset(torch.utils.data.Dataset):
         
         
         # classes: 0 index is reserved for background
-        self.classes = [_, 'apple','banana','orange'] # this _ thing does not work on you lap top. Maybe just do ''.
+        self.classes = ['', 'apple','banana','orange'] # this _ thing does not work on you lap top. Maybe just do ''.
 
     def __getitem__(self, idx):
 
