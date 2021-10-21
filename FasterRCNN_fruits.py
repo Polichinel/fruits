@@ -203,7 +203,7 @@ print(img.shape, '\n',target)
 
 # Function to visualize bounding boxes in the image
 
-def plot_img_bbox(img, target):
+def plot_img_bbox(img, target, fig_path):
     # plot the image and bboxes
     # Bounding boxes are defined as follows: x-min y-min width height
     fig, a = plt.subplots(1,1)
@@ -219,8 +219,9 @@ def plot_img_bbox(img, target):
 
         # Draw the bounding box on top of the image
         a.add_patch(rect)
-    plt.show()
+    plt.savefig(fig_path, bbox_inches = "tight")
     
 # plotting the image with bboxes. Feel free to change the index
 img, target = dataset[25]
-plot_img_bbox(img, target)
+fig_path = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_1.jpg'
+plot_img_bbox(img, target, fig_path)
