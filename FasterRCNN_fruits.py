@@ -199,3 +199,28 @@ print('length of dataset = ', len(dataset), '\n')
 # getting the image and target for a test index.  Feel free to change the index.
 img, target = dataset[78]
 print(img.shape, '\n',target)
+
+
+# Function to visualize bounding boxes in the image
+
+def plot_img_bbox(img, target):
+    # plot the image and bboxes
+    # Bounding boxes are defined as follows: x-min y-min width height
+    fig, a = plt.subplots(1,1)
+    fig.set_size_inches(5,5)
+    a.imshow(img)
+    for box in (target['boxes']):
+        x, y, width, height  = box[0], box[1], box[2]-box[0], box[3]-box[1]
+        rect = patches.Rectangle((x, y),
+                                 width, height,
+                                 linewidth = 2,
+                                 edgecolor = 'r',
+                                 facecolor = 'none')
+
+        # Draw the bounding box on top of the image
+        a.add_patch(rect)
+    plt.show()
+    
+# plotting the image with bboxes. Feel free to change the index
+img, target = dataset[25]
+plot_img_bbox(img, target)
