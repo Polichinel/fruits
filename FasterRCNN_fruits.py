@@ -201,8 +201,7 @@ img, target = dataset[78]
 print(img.shape, '\n',target)
 
 
-# Function to visualize bounding boxes in the image
-
+# Function to visualize bounding boxes in the image - save the image in the figures folder
 def plot_img_bbox(img, target, fig_path):
     # plot the image and bboxes
     # Bounding boxes are defined as follows: x-min y-min width height
@@ -225,3 +224,16 @@ def plot_img_bbox(img, target, fig_path):
 img, target = dataset[25]
 fig_path = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_1.jpg'
 plot_img_bbox(img, target, fig_path)
+
+
+def get_object_detection_model(num_classes):
+
+    # load a model pre-trained pre-trained on COCO
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
+    
+    # get number of input features for the classifier
+    in_features = model.roi_heads.box_predictor.cls_score.in_features
+    # replace the pre-trained head with a new one
+    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes) 
+
+    return model
