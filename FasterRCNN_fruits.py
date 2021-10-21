@@ -25,7 +25,7 @@ from torchvision import transforms as torchtrans
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 # these are the helper libraries imported.
-from engine import train_one_epoch, evaluate
+# from engine import train_one_epoch, evaluate
 import utils
 import transforms as T
 
