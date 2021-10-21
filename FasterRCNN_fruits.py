@@ -237,3 +237,19 @@ def get_object_detection_model(num_classes):
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes) 
 
     return model
+
+
+
+# Send train=True fro training transforms and False for val/test transforms
+def get_transform(train):
+    
+    if train:
+        return A.Compose([
+                            A.HorizontalFlip(0.5),
+                     # ToTensorV2 converts image to pytorch tensor without div by 255
+                            ToTensorV2(p=1.0) 
+                        ], bbox_params={'format': 'pascal_voc', 'label_fields': ['labels']})
+    else:
+        return A.Compose([
+                            ToTensorV2(p=1.0)
+                        ], bbox_params={'format': 'pascal_voc', 'label_fields': ['labels']})
