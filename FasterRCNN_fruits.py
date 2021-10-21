@@ -83,13 +83,13 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
 
     return metric_logger
 
-# data location
+# data location ------------------------------------------------------
 files_dir = '/home/projects/ku_00017/data/raw/fruits/train_zip/train'
 test_dir = '/home/projects/ku_00017/data/raw/fruits/test_zip/test'
 
 print(files_dir)
 print(test_dir)
-
+# --------------------------------------------------------------------
 
 # creating dataloader - could be in a utils files or a totally seperate file..
 class FruitImagesDataset(torch.utils.data.Dataset):
@@ -253,3 +253,28 @@ def get_transform(train):
         return A.Compose([
                             ToTensorV2(p=1.0)
                         ], bbox_params={'format': 'pascal_voc', 'label_fields': ['labels']})
+
+
+# prepering the dataset
+# use our dataset and defined transformations
+dataset = FruitImagesDataset(files_dir, 480, 480, transforms= get_transform(train=True))
+dataset_test = FruitImagesDataset(files_dir, 480, 480, transforms= get_transform(train=False))
+
+# split the dataset in train and test set
+torch.manual_seed(1)
+indices = torch.randperm(len(dataset)).tolist()
+
+# train test split
+test_split = 0.2
+tsize = int(len(dataset)*test_split)
+dataset = torch.utils.data.Subset(dataset, indices[:-tsize])
+dataset_test = torch.utils.data.Subset(dataset_test, indices[-tsize:])
+
+# define training and validation data loaders
+data_loader = torch.utils.data.DataLoader(
+    dataset, batch_size=10, shuffle=True, num_workers=4,
+    collate_fn=utils.collate_fn)
+
+data_loader_test = torch.utils.data.DataLoader(
+    dataset_test, batch_size=10, shuffle=False, num_workers=4,
+    collate_fn=utils.collate_fn)
