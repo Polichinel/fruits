@@ -312,3 +312,40 @@ for epoch in range(num_epochs):
     lr_scheduler.step()
     # evaluate on the test dataset
     evaluate(model, data_loader_test, device=device)
+
+# NEW ----------------------------------------------------------
+
+# Decode predictions
+
+# the function takes the original prediction and the iou threshold.
+
+def apply_nms(orig_prediction, iou_thresh=0.3):
+    
+    # torchvision returns the indices of the bboxes to keep
+    keep = torchvision.ops.nms(orig_prediction['boxes'], orig_prediction['scores'], iou_thresh)
+    
+    final_prediction = orig_prediction
+    final_prediction['boxes'] = final_prediction['boxes'][keep]
+    final_prediction['scores'] = final_prediction['scores'][keep]
+    final_prediction['labels'] = final_prediction['labels'][keep]
+    
+    return final_prediction
+
+# function to convert a torchtensor back to PIL image
+def torch_to_pil(img):
+    return torchtrans.ToPILImage()(img).convert('RGB')
+
+#Testing
+# pick one image from the test set
+img, target = dataset_test[5]
+# put the model in evaluation mode
+model.eval()
+with torch.no_grad():
+    prediction = model([img.to(device)])[0]
+    
+print('predicted #boxes: ', len(prediction['labels']))
+print('real #boxes: ', len(target['labels']))
+
+
+
+
