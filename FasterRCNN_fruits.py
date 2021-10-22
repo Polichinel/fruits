@@ -347,5 +347,18 @@ print('predicted #boxes: ', len(prediction['labels']))
 print('real #boxes: ', len(target['labels']))
 
 
+#plot EXPECTED OUTPUT
+fig_path_EO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO.jpg'
+plot_img_bbox(torch_to_pil(img), target, fig_path_EO)
+print('EXPECTED OUTPUT plotted')
 
+#plot MODEL OUTPUT
+fig_path_MO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_MO.jpg'
+plot_img_bbox(torch_to_pil(img), prediction, fig_path_MO)
+print('MODEL OUTPUT plotted')
 
+# NON-MAX-Surpresssion
+nms_prediction = apply_nms(prediction, iou_thresh=0.2)
+fig_path_NMS = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_NMS.jpg'
+plot_img_bbox(torch_to_pil(img), nms_prediction, fig_path_NMS)
+print('NMS APPLIED MODEL OUTPUT plottet')
