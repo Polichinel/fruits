@@ -354,18 +354,42 @@ print(type(prediction))
 nms_prediction = apply_nms(prediction, iou_thresh=0.2)
 print(type(nms_prediction))
 
+
+# CORRECTED?
+# Function to visualize bounding boxes in the image - save the image in the figures folder
+def plot_img_bbox(img, target, fig_path):
+    # plot the image and bboxes
+    # Bounding boxes are defined as follows: x-min y-min width height
+    fig, a = plt.subplots(1,1)
+    fig.set_size_inches(5,5)
+    a.imshow(img)
+    for box in (target['boxes']):
+        x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
+        rect = patches.Rectangle((x, y),
+                                 width, height,
+                                 linewidth = 2,
+                                 edgecolor = 'r',
+                                 facecolor = 'none')
+
+        # Draw the bounding box on top of the image
+        a.add_patch(rect)
+    plt.savefig(fig_path, bbox_inches = "tight")
+
+# ------------------
+
+
 #plot EXPECTED OUTPUT
-# fig_path_EO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO.jpg'
-# plot_img_bbox(torch_to_pil(img.cpu()), target.cpu(), fig_path_EO)
-# print('EXPECTED OUTPUT plotted')
+fig_path_EO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO.jpg'
+plot_img_bbox(torch_to_pil(img), target, fig_path_EO)
+print('EXPECTED OUTPUT plotted')
 
-# #plot MODEL OUTPUT
-# fig_path_MO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_MO.jpg'
-# plot_img_bbox(torch_to_pil(img.cpu()), prediction.cpu(), fig_path_MO)
-# print('MODEL OUTPUT plotted')
+#plot MODEL OUTPUT
+fig_path_MO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_MO.jpg'
+plot_img_bbox(torch_to_pil(img), prediction, fig_path_MO)
+print('MODEL OUTPUT plotted')
 
-# # NON-MAX-Surpresssion
-# nms_prediction = apply_nms(prediction, iou_thresh=0.2)
-# fig_path_NMS = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_NMS.jpg'
-# plot_img_bbox(torch_to_pil(img.cpu()), nms_prediction.cpu(), fig_path_NMS)
-# print('NMS APPLIED MODEL OUTPUT plottet')
+# NON-MAX-Surpresssion
+nms_prediction = apply_nms(prediction, iou_thresh=0.2)
+fig_path_NMS = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_NMS.jpg'
+plot_img_bbox(torch_to_pil(img), nms_prediction, fig_path_NMS)
+print('NMS APPLIED MODEL OUTPUT plottet')
