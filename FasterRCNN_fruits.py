@@ -398,7 +398,7 @@ print('NMS APPLIED MODEL OUTPUT plottet')
 
 test_dataset = FruitImagesDataset(test_dir, 480, 480, transforms= get_transform(train=True))
 # pick one image from the test set
-img, target = test_dataset[10]
+img, target = test_dataset[9]
 # put the model in evaluation mode
 model.eval()
 with torch.no_grad():
