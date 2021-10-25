@@ -377,7 +377,6 @@ def plot_img_bbox(img, target, fig_path):
 
 # ------------------
 
-
 #plot EXPECTED OUTPUT
 fig_path_EO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO.jpg'
 plot_img_bbox(torch_to_pil(img), target, fig_path_EO)
@@ -393,3 +392,23 @@ nms_prediction = apply_nms(prediction, iou_thresh=0.2)
 fig_path_NMS = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_NMS.jpg'
 plot_img_bbox(torch_to_pil(img), nms_prediction, fig_path_NMS)
 print('NMS APPLIED MODEL OUTPUT plottet')
+
+
+# lets try the test set:
+
+test_dataset = FruitImagesDataset(test_dir, 480, 480, transforms= get_transform(train=True))
+# pick one image from the test set
+img, target = test_dataset[10]
+# put the model in evaluation mode
+model.eval()
+with torch.no_grad():
+    prediction = model([img.to(device)])[0]
+    
+fig_path_EO_test = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO_test.jpg'
+plot_img_bbox(torch_to_pil(img), target, fig_path_EO_test)
+print('EXPECTED (test) OUTPUT plotted\n')
+
+fig_path_NMS_test = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_NMS_test.jpg'
+nms_prediction = apply_nms(prediction, iou_thresh=0.01)
+plot_img_bbox(torch_to_pil(img), nms_prediction, fig_path_NMS_test)
+print('MODEL OUTPUT (test) plotted\n')
