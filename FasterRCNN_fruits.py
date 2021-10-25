@@ -29,6 +29,9 @@ from engine import train_one_epoch, evaluate
 import utils
 import transforms as T
 
+# my own utils
+from Utils_fruits import plot_img_bbox
+
 # for transformations
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
@@ -200,7 +203,6 @@ print('length of dataset = ', len(dataset), '\n')
 img, target = dataset[78]
 print(img.shape, '\n',target)
 
-
 # # Function to visualize bounding boxes in the image - save the image in the figures folder
 # def plot_img_bbox(img, target, fig_path):
 
@@ -214,7 +216,8 @@ print(img.shape, '\n',target)
 #     fig.set_size_inches(5,5)
 #     a.imshow(img)
 #     for box in (target['boxes']):
-#         x, y, width, height  = box[0], box[1], box[2]-box[0], box[3]-box[1]
+#         # specify cpu just in case.
+#         x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
 #         rect = patches.Rectangle((x, y),
 #                                  width, height,
 #                                  linewidth = 2,
@@ -224,32 +227,6 @@ print(img.shape, '\n',target)
 #         # Draw the bounding box on top of the image
 #         a.add_patch(rect)
 #     plt.savefig(fig_path, bbox_inches = "tight")
-
-# CORRECTED
-# Function to visualize bounding boxes in the image - save the image in the figures folder
-def plot_img_bbox(img, target, fig_path):
-
-    # Remove old plot if it exists:
-    if os.path.exists(fig_path):
-        os.remove(fig_path)
-
-    # plot the image and bboxes
-    # Bounding boxes are defined as follows: x-min y-min width height
-    fig, a = plt.subplots(1,1)
-    fig.set_size_inches(5,5)
-    a.imshow(img)
-    for box in (target['boxes']):
-        # specify cpu just in case.
-        x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
-        rect = patches.Rectangle((x, y),
-                                 width, height,
-                                 linewidth = 2,
-                                 edgecolor = 'r',
-                                 facecolor = 'none')
-
-        # Draw the bounding box on top of the image
-        a.add_patch(rect)
-    plt.savefig(fig_path, bbox_inches = "tight")
     
 # plotting the image with bboxes. Feel free to change the index
 img, target = dataset[25]
@@ -268,8 +245,6 @@ def get_object_detection_model(num_classes):
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes) 
 
     return model
-
-
 
 # Send train=True fro training transforms and False for val/test transforms
 def get_transform(train):
@@ -373,45 +348,6 @@ img, target = dataset_test[5]
 model.eval()
 with torch.no_grad():
     prediction = model([img.to(device)])[0]
-    
-# print('predicted #boxes: ', len(prediction['labels']))
-# print('real #boxes: ', len(target['labels']))
-
-
-# print(type(img))
-# print(type(target))
-# print(type(prediction))
-
-# nms_prediction = apply_nms(prediction, iou_thresh=0.2)
-# print(type(nms_prediction))
-
-
-# # CORRECTED?
-# # Function to visualize bounding boxes in the image - save the image in the figures folder
-# def plot_img_bbox(img, target, fig_path):
-
-#     # Remove old plot if it exists:
-#     if os.path.exists(fig_path):
-#         os.remove(fig_path)
-
-#     # plot the image and bboxes
-#     # Bounding boxes are defined as follows: x-min y-min width height
-#     fig, a = plt.subplots(1,1)
-#     fig.set_size_inches(5,5)
-#     a.imshow(img)
-#     for box in (target['boxes']):
-#         x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
-#         rect = patches.Rectangle((x, y),
-#                                  width, height,
-#                                  linewidth = 2,
-#                                  edgecolor = 'r',
-#                                  facecolor = 'none')
-
-#         # Draw the bounding box on top of the image
-#         a.add_patch(rect)
-#     plt.savefig(fig_path, bbox_inches = "tight")
-
-# ------------------
 
 #plot EXPECTED OUTPUT
 fig_path_EO = '/home/projects/ku_00017/people/simpol/scripts/fruits/figures/plot_EO.jpg'
