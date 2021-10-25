@@ -201,6 +201,31 @@ img, target = dataset[78]
 print(img.shape, '\n',target)
 
 
+# # Function to visualize bounding boxes in the image - save the image in the figures folder
+# def plot_img_bbox(img, target, fig_path):
+
+#     # Remove old plot if it exists:
+#     if os.path.exists(fig_path):
+#         os.remove(fig_path)
+
+#     # plot the image and bboxes
+#     # Bounding boxes are defined as follows: x-min y-min width height
+#     fig, a = plt.subplots(1,1)
+#     fig.set_size_inches(5,5)
+#     a.imshow(img)
+#     for box in (target['boxes']):
+#         x, y, width, height  = box[0], box[1], box[2]-box[0], box[3]-box[1]
+#         rect = patches.Rectangle((x, y),
+#                                  width, height,
+#                                  linewidth = 2,
+#                                  edgecolor = 'r',
+#                                  facecolor = 'none')
+
+#         # Draw the bounding box on top of the image
+#         a.add_patch(rect)
+#     plt.savefig(fig_path, bbox_inches = "tight")
+
+# CORRECTED
 # Function to visualize bounding boxes in the image - save the image in the figures folder
 def plot_img_bbox(img, target, fig_path):
 
@@ -214,7 +239,8 @@ def plot_img_bbox(img, target, fig_path):
     fig.set_size_inches(5,5)
     a.imshow(img)
     for box in (target['boxes']):
-        x, y, width, height  = box[0], box[1], box[2]-box[0], box[3]-box[1]
+        # specify cpu just in case.
+        x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
         rect = patches.Rectangle((x, y),
                                  width, height,
                                  linewidth = 2,
@@ -360,30 +386,30 @@ with torch.no_grad():
 # print(type(nms_prediction))
 
 
-# CORRECTED?
-# Function to visualize bounding boxes in the image - save the image in the figures folder
-def plot_img_bbox(img, target, fig_path):
+# # CORRECTED?
+# # Function to visualize bounding boxes in the image - save the image in the figures folder
+# def plot_img_bbox(img, target, fig_path):
 
-    # Remove old plot if it exists:
-    if os.path.exists(fig_path):
-        os.remove(fig_path)
+#     # Remove old plot if it exists:
+#     if os.path.exists(fig_path):
+#         os.remove(fig_path)
 
-    # plot the image and bboxes
-    # Bounding boxes are defined as follows: x-min y-min width height
-    fig, a = plt.subplots(1,1)
-    fig.set_size_inches(5,5)
-    a.imshow(img)
-    for box in (target['boxes']):
-        x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
-        rect = patches.Rectangle((x, y),
-                                 width, height,
-                                 linewidth = 2,
-                                 edgecolor = 'r',
-                                 facecolor = 'none')
+#     # plot the image and bboxes
+#     # Bounding boxes are defined as follows: x-min y-min width height
+#     fig, a = plt.subplots(1,1)
+#     fig.set_size_inches(5,5)
+#     a.imshow(img)
+#     for box in (target['boxes']):
+#         x, y, width, height  = box[0].cpu(), box[1].cpu(), box[2].cpu()-box[0].cpu(), box[3].cpu()-box[1].cpu()
+#         rect = patches.Rectangle((x, y),
+#                                  width, height,
+#                                  linewidth = 2,
+#                                  edgecolor = 'r',
+#                                  facecolor = 'none')
 
-        # Draw the bounding box on top of the image
-        a.add_patch(rect)
-    plt.savefig(fig_path, bbox_inches = "tight")
+#         # Draw the bounding box on top of the image
+#         a.add_patch(rect)
+#     plt.savefig(fig_path, bbox_inches = "tight")
 
 # ------------------
 
