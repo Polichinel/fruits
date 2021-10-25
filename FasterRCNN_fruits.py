@@ -203,6 +203,11 @@ print(img.shape, '\n',target)
 
 # Function to visualize bounding boxes in the image - save the image in the figures folder
 def plot_img_bbox(img, target, fig_path):
+
+    # Remove old plot if it exists:
+    if os.path.exists(fig_path):
+        os.remove(fig_path)
+
     # plot the image and bboxes
     # Bounding boxes are defined as follows: x-min y-min width height
     fig, a = plt.subplots(1,1)
@@ -358,6 +363,11 @@ with torch.no_grad():
 # CORRECTED?
 # Function to visualize bounding boxes in the image - save the image in the figures folder
 def plot_img_bbox(img, target, fig_path):
+
+    # Remove old plot if it exists:
+    if os.path.exists(fig_path):
+        os.remove(fig_path)
+
     # plot the image and bboxes
     # Bounding boxes are defined as follows: x-min y-min width height
     fig, a = plt.subplots(1,1)
