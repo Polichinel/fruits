@@ -343,16 +343,16 @@ model.eval()
 with torch.no_grad():
     prediction = model([img.to(device)])[0]
     
-print('predicted #boxes: ', len(prediction['labels']))
-print('real #boxes: ', len(target['labels']))
+# print('predicted #boxes: ', len(prediction['labels']))
+# print('real #boxes: ', len(target['labels']))
 
 
-print(type(img))
-print(type(target))
-print(type(prediction))
+# print(type(img))
+# print(type(target))
+# print(type(prediction))
 
-nms_prediction = apply_nms(prediction, iou_thresh=0.2)
-print(type(nms_prediction))
+# nms_prediction = apply_nms(prediction, iou_thresh=0.2)
+# print(type(nms_prediction))
 
 
 # CORRECTED?
